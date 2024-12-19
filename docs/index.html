@@ -27,19 +27,6 @@
             width: 80%;
             max-width: 300px;
         }
-        table {
-            width: 50%;
-            margin: 20px auto;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
     </style>
 </head>
 <body>
@@ -48,16 +35,25 @@
     <br>
     <button id="sendVerb">Отправить</button>
 
-    <h2>Спряжение</h2>
-    <table id="conjugationTable" style="display: none;">
-        <thead>
-            <tr>
-                <th>Лицо</th>
-                <th>Спряжение</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-
     <script>
-        const tg = window.Telegram.Web
+        const tg = window.Telegram.WebApp;
+
+        // Обработчик для кнопки "Отправить"
+        document.getElementById('sendVerb').onclick = () => {
+            const verb = document.getElementById('verbInput').value.trim();
+
+            if (!verb) {
+                alert("Введите глагол перед отправкой!");
+                return;
+            }
+
+            // Отправляем данные боту
+            tg.sendData(verb);
+            alert("Глагол отправлен: " + verb); // Временное уведомление для проверки
+        };
+
+        // Telegram Web App готово
+        tg.ready();
+    </script>
+</body>
+</html>
