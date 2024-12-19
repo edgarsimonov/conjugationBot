@@ -11,21 +11,34 @@
             text-align: center;
             margin-top: 50px;
         }
-        button {
+        button, input {
             padding: 10px 20px;
             font-size: 16px;
-            cursor: pointer;
+            margin: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
             background-color: #0088cc;
             color: white;
-            border: none;
-            border-radius: 5px;
+            cursor: pointer;
         }
         input {
-            padding: 10px;
-            font-size: 16px;
-            margin-top: 20px;
             width: 80%;
             max-width: 300px;
+        }
+        table {
+            width: 50%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
         }
     </style>
 </head>
@@ -35,25 +48,16 @@
     <br>
     <button id="sendVerb">Отправить</button>
 
+    <h2>Спряжение</h2>
+    <table id="conjugationTable" style="display: none;">
+        <thead>
+            <tr>
+                <th>Лицо</th>
+                <th>Спряжение</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
     <script>
-        // Инициализация Telegram Web App SDK
-        const tg = window.Telegram.WebApp;
-
-        // Событие для кнопки "Отправить"
-        document.getElementById('sendVerb').onclick = () => {
-            const verb = document.getElementById('verbInput').value.trim();
-
-            if (verb) {
-                // Отправляем данные боту через Telegram Web App API
-                tg.sendData(verb);
-                console.log("Отправлены данные:", verb) // Временное уведомление для проверки
-            } else {
-                alert("Введите глагол перед отправкой!");
-            }
-        };
-
-        // Telegram Web App готово
-        tg.ready();
-    </script>
-</body>
-</html>
+        const tg = window.Telegram.Web
