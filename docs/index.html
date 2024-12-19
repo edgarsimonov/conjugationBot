@@ -38,22 +38,23 @@
     <script>
         const tg = window.Telegram.WebApp;
 
-        // Обработчик для кнопки "Отправить"
+        // Событие для кнопки "Отправить"
         document.getElementById('sendVerb').onclick = () => {
-            const verb = document.getElementById('verbInput').value.trim();
+            const verb = document.getElementById('verbInput').value.trim(); // Получаем текст из поля
 
-            if (!verb) {
+            if (!verb) { // Если поле пустое
                 alert("Введите глагол перед отправкой!");
                 return;
             }
 
-            // Отправляем данные боту
-            tg.sendData(verb);
-            alert("Глагол отправлен: " + verb); // Временное уведомление для проверки
+            // Отправляем данные боту через Telegram Web App API
+            console.log("Отправляем данные:", verb); // Лог в консоль для проверки
+            tg.sendData(verb); // Передаём данные боту
+            alert("Глагол отправлен: " + verb); // Уведомление для проверки
         };
 
-        // Telegram Web App готово
-        tg.ready();
+        tg.ready(); // Уведомляем Telegram, что Web App готов
     </script>
 </body>
 </html>
+
