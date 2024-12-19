@@ -20,18 +20,31 @@
             border: none;
             border-radius: 5px;
         }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 20px;
+            width: 80%;
+            max-width: 300px;
+        }
     </style>
 </head>
 <body>
-    <h1>Привет, Telegram Web App!</h1>
-    <p>Нажмите кнопку ниже, чтобы отправить сообщение боту.</p>
-    <button id="sendMessage">Отправить сообщение</button>
+    <h1>Введите глагол</h1>
+    <input id="verbInput" type="text" placeholder="Введите глагол">
+    <br>
+    <button id="sendVerb">Отправить</button>
 
     <script>
         const tg = window.Telegram.WebApp;
 
-        document.getElementById('sendMessage').onclick = () => {
-            tg.sendData("Привет от Web App!");
+        document.getElementById('sendVerb').onclick = () => {
+            const verb = document.getElementById('verbInput').value.trim();
+            if (verb) {
+                tg.sendData(verb); // Отправляем глагол боту
+            } else {
+                alert("Введите глагол перед отправкой!");
+            }
         };
 
         tg.ready();
