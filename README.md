@@ -1,0 +1,2 @@
+# conjugationBot
+Conjugates italian verbs

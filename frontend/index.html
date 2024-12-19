@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Web App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #0088cc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Привет, Telegram Web App!</h1>
+    <p>Нажмите кнопку ниже, чтобы отправить сообщение боту.</p>
+    <button id="sendMessage">Отправить сообщение</button>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+
+        document.getElementById('sendMessage').onclick = () => {
+            tg.sendData("Привет от Web App!");
+        };
+
+        tg.ready();
+    </script>
+</body>
+</html>
