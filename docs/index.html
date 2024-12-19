@@ -37,7 +37,7 @@
 
     <script>
         const tg = window.Telegram.WebApp;
-
+        tg.ready(); // Уведомляем Telegram, что Web App готов
         // Событие для кнопки "Отправить"
         document.getElementById('sendVerb').onclick = () => {
             const verb = document.getElementById('verbInput').value.trim(); // Получаем текст из поля
@@ -53,7 +53,7 @@
             alert("Глагол отправлен: " + verb); // Уведомление для проверки
         };
 
-        tg.ready(); // Уведомляем Telegram, что Web App готов
+
     </script>
 </body>
 </html>
