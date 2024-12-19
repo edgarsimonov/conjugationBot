@@ -36,17 +36,23 @@
     <button id="sendVerb">Отправить</button>
 
     <script>
+        // Инициализация Telegram Web App SDK
         const tg = window.Telegram.WebApp;
 
+        // Событие для кнопки "Отправить"
         document.getElementById('sendVerb').onclick = () => {
             const verb = document.getElementById('verbInput').value.trim();
+
             if (verb) {
-                tg.sendData(verb); // Отправляем глагол боту
+                // Отправляем данные боту через Telegram Web App API
+                tg.sendData(verb);
+                alert("Глагол отправлен: " + verb); // Временное уведомление для проверки
             } else {
                 alert("Введите глагол перед отправкой!");
             }
         };
 
+        // Telegram Web App готово
         tg.ready();
     </script>
 </body>
