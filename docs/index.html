@@ -4,58 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Telegram Web App</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin-top: 50px;
         }
-        button, input {
-            padding: 10px 20px;
+        input {
+            padding: 10px;
             font-size: 16px;
-            margin: 10px;
-            border-radius: 5px;
-            border: none;
         }
         button {
-            background-color: #0088cc;
-            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
             cursor: pointer;
+            margin-left: 10px;
         }
-        input {
-            width: 80%;
-            max-width: 300px;
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
-    <h1>Введите глагол</h1>
-    <input id="verbInput" type="text" placeholder="Введите глагол">
-    <br>
-    <button id="sendVerb">Отправить</button>
+    <h1>Telegram Web App</h1>
+    <p>Введите слово:</p>
+    <input type="text" id="wordInput" placeholder="Введите слово">
+    <button onclick="submitWord()">Отправить</button>
+    <div class="result" id="result"></div>
 
     <script>
-        const tg = window.Telegram.WebApp;
-        tg.ready(); // Уведомляем Telegram, что Web App готов
-        // Событие для кнопки "Отправить"
-        document.getElementById('sendVerb').onclick = () => {
-            const verb = document.getElementById('verbInput').value.trim(); // Получаем текст из поля
-
-            if (!verb) { // Если поле пустое
-                alert("Введите глагол перед отправкой!");
-                return;
+        function submitWord() {
+            const word = document.getElementById('wordInput').value;
+            if (word) {
+                fetch('https://edgarsimonov.github.io/conjugationBot/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ word: word }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('result').innerText = `Привет ${data.message}`;
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                });
+            } else {
+                document.getElementById('result').innerText = 'Введите слово!';
             }
-
-            // Отправляем данные боту через Telegram Web App API
-            alert("Отправляем данные:", verb); // Лог в консоль для проверки
-            tg.sendData(verb); // Передаём данные боту
-            alert("tg.sendData вызван!");
-            alert("Глагол отправлен: " + verb); // Уведомление для проверки
-        };
-
-
+        }
     </script>
 </body>
 </html>
-
