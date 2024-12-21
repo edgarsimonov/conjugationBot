@@ -3,62 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Web App</title>
+    <title>Conjugation App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin-top: 50px;
+            margin-top: 20px;
+            background-color: #f5deb3; /* Бежевый цвет */
+            color: #000000;
         }
         input {
             padding: 10px;
             font-size: 16px;
+            margin-bottom: 10px;
         }
         button {
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
-            margin-left: 10px;
         }
-        .result {
-            margin-top: 20px;
-            font-size: 18px;
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #000000;
+            padding: 10px 20px;
+        }
+        th {
+            background-color: #e0c6a7;
         }
     </style>
 </head>
 <body>
-    <h1>Telegram Web App</h1>
-    <p>Введите слово:</p>
-    <input type="text" id="wordInput" placeholder="Введите слово">
-    <button onclick="submitWord()">Отправить</button>
-    <div class="result" id="result"></div>
+    <h1>Conjugation App</h1>
+    <p>Введите итальянский глагол:</p>
+    <input type="text" id="verbInput" placeholder="Например, amare">
+    <button onclick="submitVerb()">Спрягать</button>
+    <div id="result"></div>
 
     <script>
         const tg = window.Telegram.WebApp;
 
-        // Уведомляем Telegram, что Web App готово
-        tg.ready();
+        function submitVerb() {
+            const verb = document.getElementById('verbInput').value;
 
-        // Устанавливаем стили в зависимости от темы
-        const themeParams = tg.themeParams;
-        const resultDiv = document.getElementById('result');
-
-        // Выбираем цвет текста в зависимости от темы
-        const textColor = themeParams.text_color || (themeParams.bg_color ? "#FFFFFF" : "#000000"); // Светлый текст для тёмной темы
-
-        document.body.style.backgroundColor = themeParams.bg_color || "#FFFFFF"; // Устанавливаем фон
-        document.body.style.color = textColor; // Устанавливаем цвет текста
-        resultDiv.style.color = textColor; // Устанавливаем цвет текста результата
-
-        function submitWord() {
-            const word = document.getElementById('wordInput').value;
-
-            if (word) {
-                resultDiv.innerText = `Привет ${word}`;
-            } else {
-                resultDiv.innerText = 'Введите слово!';
+            if (!verb) {
+                document.getElementById('result').innerText = 'Введите глагол!';
+                return;
             }
+
+            // Отправляем запрос на сервер
+            fetch("http://localhost:5000/conjugate", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ verb }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.error) {
+                        document.getElementById('result').innerText = data.error;
+                        return;
+                    }
+
+                    // Создаём таблицу со спряжением
+                    let table = "<table><tr><th>Местоимение</th><th>Форма</th></tr>";
+                    for (const [pronoun, form] of Object.entries(data)) {
+                        table += `<tr><td>${pronoun}</td><td>${form}</td></tr>`;
+                    }
+                    table += "</table>";
+                    document.getElementById('result').innerHTML = table;
+                })
+                .catch((error) => {
+                    document.getElementById('result').innerText = "Ошибка: " + error;
+                });
         }
     </script>
 </body>
