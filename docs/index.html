@@ -35,24 +35,26 @@
     <div class="result" id="result"></div>
 
     <script>
-        // Инициализация Telegram Web App
+        // Инициализация Telegram Web App API
         const tg = window.Telegram.WebApp;
-
-        tg.expand(); // Развернуть Web App на весь экран
+        tg.ready(); // Уведомляем Telegram, что Web App готово
 
         function submitWord() {
-            const word = document.getElementById('wordInput').value; // Получаем введенное слово
-            const resultDiv = document.getElementById('result'); // Элемент для вывода результата
+            const word = document.getElementById('wordInput').value;
+            const resultDiv = document.getElementById('result');
 
             if (word) {
-                resultDiv.innerText = `Привет ${word}`; // Отображаем приветствие
+                // Отправляем данные обратно в Telegram
+                tg.sendData(word);
+
+                // Показываем сообщение на странице
+                resultDiv.innerText = `Привет ${word}`;
             } else {
-                resultDiv.innerText = 'Введите слово!'; // Сообщение об ошибке
+                resultDiv.innerText = 'Введите слово!';
+            }
         }
-}
 
-
-        // Закрытие Web App, если необходимо
+        // Опционально: обработка закрытия Web App
         tg.onEvent('mainButtonClicked', () => {
             tg.close();
         });
