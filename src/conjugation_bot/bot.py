@@ -58,43 +58,34 @@ if __name__ == "__main__":
 
 
 import os
-from flask import Flask, request, jsonify
 from dotenv import load_dotenv
-from telegram import Bot, Update
-from telegram.ext import CommandHandler, MessageHandler, filters, Updater, CallbackContext
+from telegram import Update
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
 # Загрузка токена из .env
 load_dotenv()
-TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
-app = Flask(__name__)
+# Обработчик команды /start
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Привет! Введите любое слово, и я отвечу с 'Привет {слово}'.")
 
-# Инициализация бота
-bot = Bot(token=TELEGRAM_TOKEN)
-
-@app.route("/", methods=["POST"])
-def handle_webapp_request():
-    data = request.json
-    word = data.get("word", "")
-    if word:
-        return jsonify({"message": word})
-    return jsonify({"error": "Слово не было предоставлено"}), 400
-
-def start(update: Update, context: CallbackContext):
-    update.message.reply_text("Привет! Добро пожаловать в веб-приложение. Используй его для ввода слов!")
-
-def echo(update: Update, context: CallbackContext):
-    update.message.reply_text(f"Привет {update.message.text}")
+# Обработчик текстовых сообщений
+async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    word = update.message.text
+    await update.message.reply_text(f"Привет {word}")
 
 def main():
-    updater = Updater(token=TELEGRAM_TOKEN, use_context=True)
-    dp = updater.dispatcher
+    # Инициализация приложения
+    application = Application.builder().token(TELEGRAM_TOKEN).build()
 
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(MessageHandler(filters.text & ~filters.command, echo))
+    # Регистрация обработчиков
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
 
-    updater.start_polling()
-    updater.idle()
+    # Запуск бота
+    print("Бот запущен. Нажмите Ctrl+C для остановки.")
+    application.run_polling()
 
 if __name__ == "__main__":
     main()

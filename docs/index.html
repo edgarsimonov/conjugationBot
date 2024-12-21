@@ -34,21 +34,35 @@
     <div class="result" id="result"></div>
 
     <script>
+        const TELEGRAM_BOT_TOKEN = 'Ваш_Токен_Бота';
+        const CHAT_ID = 'Ваш_Chat_ID';
+
         function submitWord() {
             const word = document.getElementById('wordInput').value;
             if (word) {
-                fetch('https://edgarsimonov.github.io/conjugationBot/', {
+                const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+                fetch(url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ word: word }),
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: `Привет ${word}!`,
+                    }),
                 })
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('result').innerText = `Привет ${data.message}`;
+                    if (data.ok) {
+                        document.getElementById('result').innerText = `Сообщение отправлено: Привет ${word}`;
+                    } else {
+                        document.getElementById('result').innerText = 'Ошибка отправки сообщения';
+                        console.error('Telegram API error:', data);
+                    }
                 })
                 .catch(error => {
+                    document.getElementById('result').innerText = 'Ошибка подключения';
                     console.error('Ошибка:', error);
                 });
             } else {
