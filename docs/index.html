@@ -24,6 +24,7 @@
         .result {
             margin-top: 20px;
             font-size: 18px;
+            color: #007bff; /* Голубой цвет */
         }
     </style>
 </head>
@@ -37,19 +38,20 @@
     <script>
         // Инициализация Telegram Web App API
         const tg = window.Telegram.WebApp;
-        tg.ready();
+
+        tg.ready(); // Уведомляем Telegram, что Web App готово
 
         function submitWord() {
             const word = document.getElementById('wordInput').value; // Получаем введённое слово
-            const resultDiv = document.getElementById('result'); // Элемент для вывода результата
+            const resultDiv = document.getElementById('result'); // Элемент для отображения результата
 
             if (word) {
-                // Отображаем результат в Web App
-                resultDiv.innerText = `Привет ${word}`;
+                resultDiv.innerText = `Привет ${word}`; // Выводим результат
             } else {
-                resultDiv.innerText = 'Введите слово!';
+                resultDiv.innerText = 'Введите слово!'; // Если слово не введено
             }
         }
     </script>
 </body>
 </html>
+
