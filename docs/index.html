@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Telegram Web App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -34,41 +35,25 @@
     <div class="result" id="result"></div>
 
     <script>
-        const TELEGRAM_BOT_TOKEN = 'Ваш_Токен_Бота';
-        const CHAT_ID = 'Ваш_Chat_ID';
+        // Инициализация Telegram Web App
+        const tg = window.Telegram.WebApp;
+
+        tg.expand(); // Развернуть Web App на весь экран
 
         function submitWord() {
             const word = document.getElementById('wordInput').value;
             if (word) {
-                const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        chat_id: CHAT_ID,
-                        text: `Привет ${word}!`,
-                    }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.ok) {
-                        document.getElementById('result').innerText = `Сообщение отправлено: Привет ${word}`;
-                    } else {
-                        document.getElementById('result').innerText = 'Ошибка отправки сообщения';
-                        console.error('Telegram API error:', data);
-                    }
-                })
-                .catch(error => {
-                    document.getElementById('result').innerText = 'Ошибка подключения';
-                    console.error('Ошибка:', error);
-                });
+                document.getElementById('result').innerText = `Привет ${word}`;
             } else {
                 document.getElementById('result').innerText = 'Введите слово!';
             }
         }
+
+        // Закрытие Web App, если необходимо
+        tg.onEvent('mainButtonClicked', () => {
+            tg.close();
+        });
     </script>
 </body>
 </html>
+

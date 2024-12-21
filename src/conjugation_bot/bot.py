@@ -59,29 +59,30 @@ if __name__ == "__main__":
 
 import os
 from dotenv import load_dotenv
-from telegram import Update
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
+from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
+from telegram.ext import Application, CommandHandler, ContextTypes
 
 # Загрузка токена из .env
 load_dotenv()
-TELEGRAM_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+
+# URL вашей Web App
+WEB_APP_URL = "https://edgarsimonov.github.io/conjugationBot/"  # Замените на URL вашего GitHub Pages
 
 # Обработчик команды /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Привет! Введите любое слово, и я отвечу с 'Привет {слово}'.")
-
-# Обработчик текстовых сообщений
-async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    word = update.message.text
-    await update.message.reply_text(f"Привет {word}")
+    keyboard = [
+        [InlineKeyboardButton("Открыть Web App", web_app=WEB_APP_URL)]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    await update.message.reply_text("Нажмите кнопку ниже, чтобы открыть Web App:", reply_markup=reply_markup)
 
 def main():
-    # Инициализация приложения
+    # Создание приложения Telegram Bot
     application = Application.builder().token(TELEGRAM_TOKEN).build()
 
     # Регистрация обработчиков
     application.add_handler(CommandHandler("start", start))
-    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
 
     # Запуск бота
     print("Бот запущен. Нажмите Ctrl+C для остановки.")
@@ -89,3 +90,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
