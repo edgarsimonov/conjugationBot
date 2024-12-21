@@ -59,23 +59,30 @@ if __name__ == "__main__":
 
 import os
 from dotenv import load_dotenv
-from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
+from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 from telegram.ext import Application, CommandHandler, ContextTypes
 
 # Загрузка токена из .env
 load_dotenv()
-TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
 # URL вашей Web App
-WEB_APP_URL = "https://edgarsimonov.github.io/conjugationBot/"  # Замените на URL вашего GitHub Pages
+WEB_APP_URL = "https://edgarsimonov.github.io/conjugationBot/"  # Замените на ваш GitHub Pages URL
 
 # Обработчик команды /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # Создаем объект WebAppInfo для кнопки
+    web_app_info = WebAppInfo(url=WEB_APP_URL)
+
+    # Создаем кнопку с Web App
     keyboard = [
-        [InlineKeyboardButton("Открыть Web App", web_app=WEB_APP_URL)]
+        [InlineKeyboardButton("Открыть Web App", web_app=web_app_info)]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.message.reply_text("Нажмите кнопку ниже, чтобы открыть Web App:", reply_markup=reply_markup)
+
+    await update.message.reply_text(
+        "Нажмите кнопку ниже, чтобы открыть Web App:", reply_markup=reply_markup
+    )
 
 def main():
     # Создание приложения Telegram Bot

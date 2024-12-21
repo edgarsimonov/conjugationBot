@@ -41,13 +41,16 @@
         tg.expand(); // Развернуть Web App на весь экран
 
         function submitWord() {
-            const word = document.getElementById('wordInput').value;
+            const word = document.getElementById('wordInput').value; // Получаем введенное слово
+            const resultDiv = document.getElementById('result'); // Элемент для вывода результата
+
             if (word) {
-                document.getElementById('result').innerText = `Привет ${word}`;
+                resultDiv.innerText = `Привет ${word}`; // Отображаем приветствие
             } else {
-                document.getElementById('result').innerText = 'Введите слово!';
-            }
+                resultDiv.innerText = 'Введите слово!'; // Сообщение об ошибке
         }
+}
+
 
         // Закрытие Web App, если необходимо
         tg.onEvent('mainButtonClicked', () => {
