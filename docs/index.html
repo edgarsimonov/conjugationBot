@@ -24,7 +24,6 @@
         .result {
             margin-top: 20px;
             font-size: 18px;
-            color: #007bff !important; /* Принудительный голубой цвет */
         }
     </style>
 </head>
@@ -36,22 +35,33 @@
     <div class="result" id="result"></div>
 
     <script>
-        // Инициализация Telegram Web App API
         const tg = window.Telegram.WebApp;
 
-        tg.ready(); // Уведомляем Telegram, что Web App готово
+        // Уведомляем Telegram, что Web App готово
+        tg.ready();
+
+        // Устанавливаем стили в зависимости от темы
+        const themeParams = tg.themeParams;
+        const resultDiv = document.getElementById('result');
+
+        // Выбираем цвет текста в зависимости от темы
+        const textColor = themeParams.text_color || (themeParams.bg_color ? "#FFFFFF" : "#000000"); // Светлый текст для тёмной темы
+
+        document.body.style.backgroundColor = themeParams.bg_color || "#FFFFFF"; // Устанавливаем фон
+        document.body.style.color = textColor; // Устанавливаем цвет текста
+        resultDiv.style.color = textColor; // Устанавливаем цвет текста результата
 
         function submitWord() {
-            const word = document.getElementById('wordInput').value; // Получаем введённое слово
-            const resultDiv = document.getElementById('result'); // Элемент для отображения результата
+            const word = document.getElementById('wordInput').value;
 
             if (word) {
-                resultDiv.innerText = `Привет ${word}`; // Выводим результат
+                resultDiv.innerText = `Привет ${word}`;
             } else {
-                resultDiv.innerText = 'Введите слово!'; // Если слово не введено
+                resultDiv.innerText = 'Введите слово!';
             }
         }
     </script>
 </body>
 </html>
+
 
